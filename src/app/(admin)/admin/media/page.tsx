@@ -1,29 +1,25 @@
-'use client';
-
 import React from 'react';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { mockMediaAssets } from '@/data';
 import { Upload, Trash2, Eye } from 'lucide-react';
 
 export default function AdminMediaPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between pb-4 border-b-2.5 border-carbon">
-        <div>
-          <h1 className="font-display font-black text-2xl uppercase text-carbon tracking-tight">
-            Media Library & Vault
-          </h1>
-          <p className="font-mono text-xs text-carbon-muted mt-0.5">
-            142 assets stored · Blob storage sync active (4.2 MB / 50 MB)
-          </p>
-        </div>
-        <Button variant="primary" size="sm" className="gap-1.5 font-mono">
-          <Upload className="w-3.5 h-3.5" /> Upload File
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="Media Library & Vault"
+        description="142 assets stored · Blob storage sync active (4.2 MB / 50 MB)"
+        actionButton={
+          <Button variant="primary" size="sm" className="gap-1.5 font-mono">
+            <Upload className="w-3.5 h-3.5" /> Upload File
+          </Button>
+        }
+      />
+
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {mockMediaAssets.map((asset) => (

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { mockProjects, mockDesigns, mockActivities } from '@/data';
-import { Edit3, ExternalLink, Search, Filter } from 'lucide-react';
+import { EmptyState } from '@/components/ui/feedback-state';
+import { Search } from 'lucide-react';
 
 export const ContentTable: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,7 +21,7 @@ export const ContentTable: React.FC = () => {
       taxonomy: 'PROJECT',
       status: 'FEATURED',
       modified: '2h ago',
-      viewUrl: '/#projects',
+      viewUrl: '/projects',
     },
     {
       id: 'item-2',
@@ -30,7 +30,7 @@ export const ContentTable: React.FC = () => {
       taxonomy: 'DESIGN',
       status: 'PUBLISHED',
       modified: 'Yesterday',
-      viewUrl: '/#designs',
+      viewUrl: '/design',
     },
     {
       id: 'item-3',
@@ -39,7 +39,7 @@ export const ContentTable: React.FC = () => {
       taxonomy: 'ACTIVITY',
       status: 'PUBLISHED',
       modified: 'Oct 20, 2024',
-      viewUrl: '/#activities',
+      viewUrl: '/activities',
     },
     {
       id: 'item-4',
@@ -48,7 +48,7 @@ export const ContentTable: React.FC = () => {
       taxonomy: 'PROJECT',
       status: 'DRAFT',
       modified: '3 days ago',
-      viewUrl: '/#projects',
+      viewUrl: '/projects',
     },
     {
       id: 'item-5',
@@ -57,7 +57,7 @@ export const ContentTable: React.FC = () => {
       taxonomy: 'DESIGN',
       status: 'PUBLISHED',
       modified: '4 days ago',
-      viewUrl: '/#designs',
+      viewUrl: '/design',
     },
   ];
 
@@ -102,66 +102,80 @@ export const ContentTable: React.FC = () => {
         </div>
       </div>
 
-      {/* Data Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left font-mono text-xs">
-          <thead className="bg-paper text-carbon-muted border-b-2 border-carbon uppercase text-[10px] tracking-wider">
-            <tr>
-              <th className="p-3">TITLE // SOURCE SLUG</th>
-              <th className="p-3">STATUS SYSTEM</th>
-              <th className="p-3">LAST MODIFIED</th>
-              <th className="p-3 text-right">ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-carbon/10">
-            {filteredItems.map((row) => (
-              <tr key={row.id} className="hover:bg-paper-technical/60 transition-colors">
-                <td className="p-3">
-                  <div className="font-display font-bold text-sm text-carbon">
-                    {row.title}
-                  </div>
-                  <div className="text-[10px] text-carbon-muted font-mono mt-0.5">
-                    {row.slug} · <span className="text-kalcer-cobalt font-bold">[{row.taxonomy}]</span>
-                  </div>
-                </td>
-
-                <td className="p-3">
-                  {row.status === 'FEATURED' && (
-                    <Badge variant="yellow" pill>
-                      ★ FEATURED
-                    </Badge>
-                  )}
-                  {row.status === 'PUBLISHED' && (
-                    <Badge variant="emerald" pill>
-                      ✓ PUBLISHED
-                    </Badge>
-                  )}
-                  {row.status === 'DRAFT' && (
-                    <Badge variant="default" pill>
-                      ✎ DRAFT
-                    </Badge>
-                  )}
-                </td>
-
-                <td className="p-3 text-neutral-500 font-semibold">{row.modified}</td>
-
-                <td className="p-3 text-right space-x-2">
-                  <button className="px-2.5 py-1 bg-white border border-carbon text-xs font-bold hover:bg-kalcer-yellow brutal-press">
-                    Edit
-                  </button>
-                  <Link
-                    href={row.viewUrl}
-                    target="_blank"
-                    className="px-2.5 py-1 bg-white border border-carbon text-xs font-bold hover:bg-paper-technical"
-                  >
-                    View
-                  </Link>
-                </td>
+      {/* Data Table or Empty State */}
+      {filteredItems.length === 0 ? (
+        <EmptyState
+          title="No taxonomy items match your filter"
+          description="Try clearing the search query or selecting a different taxonomy filter."
+          actionLabel="Clear Filters"
+          onAction={() => {
+            setSearchQuery('');
+            setSelectedTaxonomy('ALL');
+          }}
+        />
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left font-mono text-xs">
+            <thead className="bg-paper text-carbon-muted border-b-2 border-carbon uppercase text-[10px] tracking-wider">
+              <tr>
+                <th className="p-3">TITLE // SOURCE SLUG</th>
+                <th className="p-3">STATUS SYSTEM</th>
+                <th className="p-3">LAST MODIFIED</th>
+                <th className="p-3 text-right">ACTIONS</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-carbon/10">
+              {filteredItems.map((row) => (
+                <tr key={row.id} className="hover:bg-paper-technical/60 transition-colors">
+                  <td className="p-3">
+                    <div className="font-display font-bold text-sm text-carbon">
+                      {row.title}
+                    </div>
+                    <div className="text-[10px] text-carbon-muted font-mono mt-0.5">
+                      {row.slug} · <span className="text-kalcer-cobalt font-bold">[{row.taxonomy}]</span>
+                    </div>
+                  </td>
+
+                  <td className="p-3">
+                    {row.status === 'FEATURED' && (
+                      <Badge variant="yellow" pill>
+                        ★ FEATURED
+                      </Badge>
+                    )}
+                    {row.status === 'PUBLISHED' && (
+                      <Badge variant="emerald" pill>
+                        ✓ PUBLISHED
+                      </Badge>
+                    )}
+                    {row.status === 'DRAFT' && (
+                      <Badge variant="default" pill>
+                        ✎ DRAFT
+                      </Badge>
+                    )}
+                  </td>
+
+                  <td className="p-3 text-neutral-500 font-semibold">{row.modified}</td>
+
+                  <td className="p-3 text-right space-x-2">
+                    <Button variant="secondary" size="sm" className="font-mono text-xs px-2.5 py-1">
+                      Edit
+                    </Button>
+                    <Button
+                      href={row.viewUrl}
+                      target="_blank"
+                      variant="outline"
+                      size="sm"
+                      className="font-mono text-xs px-2.5 py-1 border border-carbon"
+                    >
+                      View
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="p-3 border-t-2 border-carbon bg-paper flex items-center justify-between text-xs font-mono text-carbon-muted">
         <span>Showing {filteredItems.length} items</span>
@@ -172,3 +186,4 @@ export const ContentTable: React.FC = () => {
     </Card>
   );
 };
+

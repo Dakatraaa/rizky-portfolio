@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { mockProjects, mockDesigns, mockActivities, mockContentItems, mockCertifications } from '@/data';
 
 export const StatsGrid: React.FC = () => {

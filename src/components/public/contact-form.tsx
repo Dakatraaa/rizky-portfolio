@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { MascotRenderer } from '@/components/mascot/mascot-renderer';
 import { SpeechBubble } from '@/components/mascot/speech-bubble';
 import { mockProfile } from '@/data';
-import { Check, Copy, Mail, Send, Terminal } from 'lucide-react';
+import { Check, Copy, Send } from 'lucide-react';
 
 export const ContactForm: React.FC = () => {
   const [copied, setCopied] = useState(false);

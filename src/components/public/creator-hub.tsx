@@ -1,11 +1,7 @@
-'use client';
-
 import React from 'react';
-import Image from 'next/image';
-import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ContentCard } from '@/components/public/cards/content-card';
 import { mockContentItems, mockSocialLinks } from '@/data';
-import { Play, ArrowUpRight, Youtube, BookOpen, Twitter, Github, Activity } from 'lucide-react';
 
 export const CreatorHub: React.FC = () => {
   return (
@@ -65,45 +61,7 @@ export const CreatorHub: React.FC = () => {
         {/* 4 Episode Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {mockContentItems.map((item) => (
-            <Card key={item.id} elevation={1} interactive className="p-3 bg-white flex flex-col justify-between">
-              <div>
-                <div className="relative w-full aspect-video bg-paper-technical border-2 border-carbon overflow-hidden">
-                  <Image
-                    src={item.thumbnail}
-                    alt={item.title}
-                    fill
-                    className="object-contain p-2 pixelated"
-                  />
-                  <div className="absolute top-2 left-2 bg-carbon text-white font-mono text-[9px] px-1.5 py-0.5">
-                    {item.metricHighlight}
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-white/90 border border-carbon text-carbon font-mono text-[9px] px-1.5 py-0.5">
-                    {item.readOrWatchTime}
-                  </div>
-                </div>
-
-                <div className="pt-3">
-                  <span className="font-mono text-[10px] text-kalcer-orange font-bold uppercase block">
-                    {item.platformTag}
-                  </span>
-                  <h4 className="font-display font-bold text-sm text-carbon mt-1 leading-snug">
-                    {item.title}
-                  </h4>
-                  <p className="font-body text-xs text-carbon-muted mt-1 line-clamp-2">
-                    {item.summary}
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-3 mt-3 border-t border-carbon/10 flex items-center justify-between">
-                <span className="font-mono text-[10px] text-neutral-400">
-                  {item.publishDate}
-                </span>
-                <span className="font-mono text-xs font-bold text-kalcer-cobalt flex items-center">
-                  DISPATCH <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
-                </span>
-              </div>
-            </Card>
+            <ContentCard key={item.id} item={item} />
           ))}
         </div>
 

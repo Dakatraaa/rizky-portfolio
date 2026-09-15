@@ -3,10 +3,9 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { SkillBadge } from '@/components/public/cards/skill-badge';
 import { mockSkills } from '@/data';
 import { Skill } from '@/types';
-import { Terminal, Code, Cpu, Globe, Database, PenTool, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const TechRigs: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -73,35 +72,14 @@ export const TechRigs: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left: Skill Chips Grid */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {filteredSkills.map((skill) => {
-              const isSelected = activeSkill.id === skill.id;
-              return (
-                <button
-                  key={skill.id}
-                  onClick={() => setActiveSkill(skill)}
-                  className={`p-3 text-left border-2 border-carbon rounded-sm transition-all brutal-press flex flex-col justify-between h-24 ${
-                    isSelected
-                      ? 'bg-kalcer-yellow text-carbon brutal-shadow-sm font-bold scale-[1.02]'
-                      : 'bg-white text-carbon hover:bg-paper-technical'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <span className="font-mono text-[9px] uppercase font-bold text-carbon-muted">
-                      {skill.category}
-                    </span>
-                    {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-kalcer-orange" />
-                    )}
-                  </div>
-                  <div className="font-display font-extrabold text-sm sm:text-base leading-snug">
-                    {skill.name}
-                  </div>
-                  <div className="font-mono text-[10px] text-carbon-muted">
-                    SCORE: {skill.benchmarkScore}/100
-                  </div>
-                </button>
-              );
-            })}
+            {filteredSkills.map((skill) => (
+              <SkillBadge
+                key={skill.id}
+                skill={skill}
+                isSelected={activeSkill.id === skill.id}
+                onClick={() => setActiveSkill(skill)}
+              />
+            ))}
           </div>
 
           {/* Right: Inspector Detail Card */}

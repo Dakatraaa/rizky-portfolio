@@ -31,9 +31,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['"Space Grotesk"', 'sans-serif'],
-        body: ['"Plus Jakarta Sans"', 'sans-serif'],
-        mono: ['"Space Mono"', 'monospace'],
+        display: ['var(--font-display)', '"Space Grotesk"', 'sans-serif'],
+        body: ['var(--font-body)', '"Plus Jakarta Sans"', 'sans-serif'],
+        mono: ['var(--font-mono)', '"Space Mono"', 'monospace'],
       },
       boxShadow: {
         'brutal-xs': '2px 2px 0px #111111',

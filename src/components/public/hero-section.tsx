@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -7,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Stamp } from '@/components/ui/stamp';
 import { TapeStrip } from '@/components/ui/tape-strip';
 import { mockProfile } from '@/data';
-import { ArrowRight, Coffee, ShieldCheck, Terminal } from 'lucide-react';
+import { ArrowRight, Coffee, ShieldCheck } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
@@ -36,26 +34,18 @@ export const HeroSection: React.FC = () => {
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <a href="#projects">
-              <Button variant="primary" size="lg" className="gap-2">
-                EXPLORE PROJECTS <ArrowRight className="w-4 h-4" />
-              </Button>
-            </a>
-            <a href="#skills">
-              <Button variant="secondary" size="lg">
-                SKILLS & RIGS [28]
-              </Button>
-            </a>
-            <a href="#contact">
-              <Button variant="terminal" size="md" className="gap-2">
-                <Coffee className="w-4 h-4 text-kalcer-yellow" /> SPONSOR RUN/COFFEE
-              </Button>
-            </a>
-            <a href="#certifications">
-              <Button variant="outline" size="sm" className="gap-1.5 border border-carbon font-mono">
-                <ShieldCheck className="w-3.5 h-3.5 text-kalcer-cobalt" /> CERTIFICATIONS [6]
-              </Button>
-            </a>
+            <Button href="#projects" variant="primary" size="lg" className="gap-2">
+              EXPLORE PROJECTS <ArrowRight className="w-4 h-4" />
+            </Button>
+            <Button href="#skills" variant="secondary" size="lg">
+              SKILLS & RIGS [28]
+            </Button>
+            <Button href="#contact" variant="terminal" size="md" className="gap-2">
+              <Coffee className="w-4 h-4 text-kalcer-yellow" /> SPONSOR RUN/COFFEE
+            </Button>
+            <Button href="#certifications" variant="outline" size="sm" className="gap-1.5 border border-carbon font-mono">
+              <ShieldCheck className="w-3.5 h-3.5 text-kalcer-cobalt" /> CERTIFICATIONS [6]
+            </Button>
           </div>
 
           {/* Telemetry Metric Grid */}
@@ -128,7 +118,6 @@ export const HeroSection: React.FC = () => {
                 priority
                 className="object-contain p-4 pixelated"
               />
-              {/* Bottom tape label on photo */}
               <div className="absolute bottom-2 right-2">
                 <span className="px-2 py-0.5 bg-kalcer-orange text-white font-mono text-[10px] font-extrabold uppercase border border-carbon shadow-sm">
                   KALCER STUDIO // INK
