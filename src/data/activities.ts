@@ -1,0 +1,46 @@
+import { Activity } from '@/types';
+
+export const mockActivities: Activity[] = [
+  {
+    id: 'act-01',
+    slug: 'sudirman-cfd-half-marathon-simulation',
+    title: 'Sudirman Car-Free Day 21.1K Half Marathon Simulation',
+    category: 'MARATHON',
+    date: 'Oct 20, 2024',
+    location: 'Jl. Jend. Sudirman, Jakarta',
+    telemetry: {
+      distanceKm: 21.1,
+      paceMinPerKm: "4'42\"/KM",
+      splitTime: '1:39:14',
+      cadenceSpm: 172,
+    },
+    summary: 'Solo pacing session testing RunHub OS telemetry thresholds against live humid morning conditions. Locked into steady 4:40-4:45 splits from FX Senayan to Monas turnaround.',
+    accentTag: 'MARATHON OPS',
+    status: 'PUBLISHED',
+    updatedAt: 'Oct 20, 2024',
+  },
+  {
+    id: 'act-02',
+    slug: 'live-webassembly-math-kernel-demo',
+    title: 'Live WebAssembly Math Kernel Demo & Tech Talk',
+    category: 'MEETUP',
+    date: 'Sep 28, 2024',
+    location: 'Jakarta JS & Go Community Meetup',
+    summary: 'Presented an open demo running client-side Fourier Transform algorithms directly inside WebAssembly workers with zero frame drops at 60 FPS.',
+    accentTag: 'TECH KEYNOTE',
+    status: 'PUBLISHED',
+    updatedAt: 'Sep 29, 2024',
+  },
+  {
+    id: 'act-03',
+    slug: 'bandung-risograph-2-color-lab',
+    title: 'Bandung Risograph 2-Color Lab Workshop',
+    category: 'WORKSHOP',
+    date: 'Aug 14, 2024',
+    location: 'Kalcer Atelier, Bandung',
+    summary: 'Hands-on print session printing a 40-copy run of experimental street flyers using dual-drum Risograph RZ220 with Fluorescent Pink and Teal inks.',
+    accentTag: 'RISO GUILD',
+    status: 'PUBLISHED',
+    updatedAt: 'Aug 15, 2024',
+  },
+];

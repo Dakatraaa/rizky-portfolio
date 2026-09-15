@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --color-paper: #FAF8F5;
+  --color-paper-technical: #F2EFE9;
+  --color-surface: #FFFFFF;
+  --color-carbon: #111111;
+  --color-carbon-muted: #666666;
+  --color-guide: #E2DDD5;
+
+  --color-orange: #FF5500;
+  --color-cobalt: #2563EB;
+  --color-yellow: #FFE600;
+  --color-lime: #B4F51C;
+  --color-pink: #FF3E83;
+  --color-emerald: #10B981;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-carbon);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Graph Paper Canvas Grid Pattern */
+.graph-paper-bg {
+  background-color: #FAF8F5;
+  background-image: 
+    linear-gradient(to right, #E2DDD5 1px, transparent 1px),
+    linear-gradient(to bottom, #E2DDD5 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Hard Neo-Brutalist Affordances */
+.brutal-border {
+  border: 2.5px solid #111111;
+}
+
+.brutal-border-3 {
+  border: 3px solid #111111;
+}
+
+.brutal-shadow-sm {
+  box-shadow: 3px 3px 0px #111111;
+}
+
+.brutal-shadow {
+  box-shadow: 4px 4px 0px #111111;
+}
+
+.brutal-shadow-md {
+  box-shadow: 5px 5px 0px #111111;
+}
+
+.brutal-shadow-lg {
+  box-shadow: 6px 6px 0px #111111;
+}
+
+.brutal-shadow-xl {
+  box-shadow: 8px 8px 0px #111111;
+}
+
+/* Interactive Tactile Click Depression */
+.brutal-press {
+  transition: transform 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
+}
+
+.brutal-press:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #111111;
+}
+
+.brutal-press:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #111111;
+}
+
+/* Pixel Art Rendering Directives */
+.pixelated {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Custom Scrollbar for Brutalist aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+  border-left: 2px solid #111111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #111111;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5500;
+}
