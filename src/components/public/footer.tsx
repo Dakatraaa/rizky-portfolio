@@ -2,9 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { mockProfile } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 
 export const Footer: React.FC = () => {
+  const { profile } = usePortfolioContent();
   return (
     <footer className="bg-carbon text-white py-12 border-t-2.5 border-carbon">
       <div className="max-w-7xl mx-auto px-4">
@@ -88,7 +89,7 @@ export const Footer: React.FC = () => {
         {/* Sub-footer */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-neutral-400">
           <div>
-            © 2024–2026 {mockProfile.name}. ALL RIGHTS RESERVED.
+            © 2024–2026 {profile.name || 'Ariesta Rizky'}. ALL RIGHTS RESERVED.
           </div>
           <div className="flex items-center gap-4">
             <span>KALCER-SYSTEM-V2.4</span>

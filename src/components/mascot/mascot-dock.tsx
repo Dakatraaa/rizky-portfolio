@@ -3,13 +3,29 @@
 import React, { useState } from 'react';
 import { MascotRenderer, MascotPoseType } from './mascot-renderer';
 import { SpeechBubble } from './speech-bubble';
-import { mockMascotSettings } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 import { Activity, MessageSquare, RefreshCw, X } from 'lucide-react';
 
 export const MascotDock: React.FC = () => {
+  const { mascotSettings } = usePortfolioContent();
   const [isOpen, setIsOpen] = useState(false);
   const [dialogueIndex, setDialogueIndex] = useState(0);
-  const [currentPose, setCurrentPose] = useState<MascotPoseType>('master');
+
+  const poseMap: Record<string, MascotPoseType> = {
+    idle: 'master',
+    runner: 'runner-warmup',
+    developer: 'developer-code',
+    trading: 'developer-idea',
+    interaction: 'interaction-wave',
+    daily: 'daily-coffee',
+  };
+
+  const initialPose: MascotPoseType = (mascotSettings?.activePose && poseMap[mascotSettings.activePose]) || 'master';
+  const [currentPose, setCurrentPose] = useState<MascotPoseType>(initialPose);
+
+  const dialogues = mascotSettings?.dialogueList && mascotSettings.dialogueList.length > 0
+    ? mascotSettings.dialogueList
+    : ['Halo! Saya Mas Rizky Mascot — Kalcer Studio AI Guide.'];
 
   const poses: MascotPoseType[] = [
     'master',
@@ -20,7 +36,7 @@ export const MascotDock: React.FC = () => {
   ];
 
   const nextDialogue = () => {
-    setDialogueIndex((prev) => (prev + 1) % mockMascotSettings.dialogueList.length);
+    setDialogueIndex((prev) => (prev + 1) % dialogues.length);
     setCurrentPose(poses[(dialogueIndex + 1) % poses.length]);
   };
 
@@ -30,7 +46,7 @@ export const MascotDock: React.FC = () => {
       {isOpen && (
         <div className="mb-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <SpeechBubble
-            message={mockMascotSettings.dialogueList[dialogueIndex]}
+            message={dialogues[dialogueIndex % dialogues.length]}
             className="w-72"
           />
           <div className="flex gap-1 mt-1 justify-end">
@@ -65,7 +81,7 @@ export const MascotDock: React.FC = () => {
               </span>
             </div>
             <span className="font-mono text-[9px] text-carbon-muted">
-              {mockMascotSettings.telemetryVersion} · CLICK TO CHAT
+              {mascotSettings.telemetryVersion} · CLICK TO CHAT
             </span>
           </div>
         </button>

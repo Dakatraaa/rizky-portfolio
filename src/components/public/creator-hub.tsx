@@ -1,9 +1,14 @@
+'use client';
+
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { ContentCard } from '@/components/public/cards/content-card';
-import { mockContentItems, mockSocialLinks } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 
 export const CreatorHub: React.FC = () => {
+  const { contentItems, socialLinks, projects, designs } = usePortfolioContent();
+  const publishedItems = contentItems.filter((c) => c.published !== false && c.status !== 'DRAFT');
+
   return (
     <section id="creator" className="py-14 border-b-2.5 border-carbon bg-paper">
       <div className="max-w-7xl mx-auto px-4">
@@ -26,28 +31,32 @@ export const CreatorHub: React.FC = () => {
             </p>
           </div>
           <Badge variant="yellow" pill>
-            BROADCAST STATUS: LIVE DISPATCHES
+            BROADCAST STATUS: {publishedItems.length} DISPATCHES
           </Badge>
         </div>
 
         {/* 4 Platform Metrics */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
           <div className="p-4 bg-white border-2 border-carbon text-center brutal-shadow-sm">
-            <div className="font-display font-black text-3xl text-carbon">04 RIGS</div>
+            <div className="font-display font-black text-3xl text-carbon">
+              {projects.length.toString().padStart(2, '0')} RIGS
+            </div>
             <div className="font-mono text-[10px] text-carbon-muted font-bold mt-1">
-              CODE & DEV EXPERIMENTS
+              CODE &amp; DEV EXPERIMENTS
             </div>
           </div>
           <div className="p-4 bg-white border-2 border-carbon text-center brutal-shadow-sm">
-            <div className="font-display font-black text-3xl text-kalcer-orange">85+ DROPS</div>
+            <div className="font-display font-black text-3xl text-kalcer-orange">
+              {designs.length}+ DROPS
+            </div>
             <div className="font-mono text-[10px] text-carbon-muted font-bold mt-1">
-              TACTILE PRINT & RISOGRAPH
+              TACTILE PRINT &amp; RISOGRAPH
             </div>
           </div>
           <div className="p-4 bg-white border-2 border-carbon text-center brutal-shadow-sm">
             <div className="font-display font-black text-3xl text-kalcer-cobalt">3 YEARS</div>
             <div className="font-mono text-[10px] text-carbon-muted font-bold mt-1">
-              RUNNER&apos;S DIARY & TELEMETRY
+              RUNNER&apos;S DIARY &amp; TELEMETRY
             </div>
           </div>
           <div className="p-4 bg-white border-2 border-carbon text-center brutal-shadow-sm">
@@ -58,9 +67,9 @@ export const CreatorHub: React.FC = () => {
           </div>
         </div>
 
-        {/* 4 Episode Cards */}
+        {/* Episode Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {mockContentItems.map((item) => (
+          {publishedItems.map((item) => (
             <ContentCard key={item.id} item={item} />
           ))}
         </div>
@@ -71,7 +80,7 @@ export const CreatorHub: React.FC = () => {
             // ACTIVE SOCIAL FREQUENCIES
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {mockSocialLinks.map((soc) => (
+            {socialLinks.map((soc) => (
               <a
                 key={soc.id}
                 href={soc.url}
@@ -96,3 +105,4 @@ export const CreatorHub: React.FC = () => {
     </section>
   );
 };
+

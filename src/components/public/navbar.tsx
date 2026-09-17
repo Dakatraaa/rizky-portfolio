@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { mockProfile } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 import { Menu, X, FileText } from 'lucide-react';
 
 const navLinks = [
@@ -19,6 +19,7 @@ const navLinks = [
 ];
 
 export const Navbar: React.FC = () => {
+  const { profile } = usePortfolioContent();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -59,7 +60,7 @@ export const Navbar: React.FC = () => {
             <span className="text-neutral-300">SYSTEM STATUS: OPTIMAL</span>
           </span>
           <a
-            href={mockProfile.cvUrl || '#'}
+            href={profile.cvUrl || '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-kalcer-yellow flex items-center gap-1 px-1.5 py-0.5 border border-white/30 rounded-sm font-mono text-[10px]"
@@ -88,7 +89,7 @@ export const Navbar: React.FC = () => {
               KALCER STUDIO
             </span>
             <span className="font-mono text-[10px] tracking-wider text-carbon-muted block">
-              ARIESTA RIZKY
+              {profile.name?.toUpperCase() || 'ARIESTA RIZKY'}
             </span>
           </div>
         </Link>
@@ -97,7 +98,7 @@ export const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center">
           <Badge variant="yellow" pill className="border-carbon">
             <span className="w-1.5 h-1.5 rounded-full bg-carbon animate-ping" />
-            {mockProfile.availability}
+            {profile.availability}
           </Badge>
         </div>
 
@@ -179,7 +180,7 @@ export const Navbar: React.FC = () => {
 
             {/* Mobile Resume Link */}
             <a
-              href={mockProfile.cvUrl || '#'}
+              href={profile.cvUrl || '#'}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between px-3 py-2.5 font-display font-bold text-sm text-kalcer-cobalt border-b border-carbon/10 hover:bg-paper-technical"
@@ -207,7 +208,7 @@ export const Navbar: React.FC = () => {
             <div className="pt-3 flex items-center justify-center">
               <Badge variant="yellow" pill className="border-carbon">
                 <span className="w-1.5 h-1.5 rounded-full bg-carbon animate-ping" />
-                {mockProfile.availability}
+                {profile.availability}
               </Badge>
             </div>
           </nav>

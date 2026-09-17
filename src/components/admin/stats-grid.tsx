@@ -1,22 +1,36 @@
+'use client';
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { mockProjects, mockDesigns, mockActivities, mockContentItems, mockCertifications } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 
 export const StatsGrid: React.FC = () => {
+  const { projects, designs, activities, certifications, contentItems } = usePortfolioContent();
+
+  const activeProjects = projects.filter((p) => p.status === 'PUBLISHED' || p.status === 'FEATURED').length;
+  const draftProjects = projects.filter((p) => p.status === 'DRAFT').length;
+
+  const risoCount = designs.filter((d) => d.category === 'RISO' || d.category === 'POSTER').length;
+  const apparelCount = designs.filter((d) => d.category === 'APPAREL' || d.category === 'JERSEY' || d.category === 'T_SHIRT').length;
+  const otherDesigns = designs.length - risoCount - apparelCount;
+
+  const marathonCount = activities.filter((a) => a.category === 'MARATHON' || a.category === 'RUNNING').length;
+  const otherActivities = activities.length - marathonCount;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Card 1: Projects */}
       <Card elevation={1} className="p-4 bg-white relative">
         <div className="flex items-center justify-between text-xs font-mono">
           <span className="font-bold text-carbon-muted uppercase">PROJECTS</span>
-          <span className="text-kalcer-orange font-bold">+2 NEW</span>
+          <span className="text-kalcer-orange font-bold">SYSTEMS</span>
         </div>
         <div className="font-display font-black text-3xl text-carbon mt-2">
-          {mockProjects.length}
+          {projects.length}
         </div>
         <div className="text-xs font-mono text-carbon-muted mt-1 flex justify-between border-t border-carbon/10 pt-2">
-          <span>{mockProjects.filter((p) => p.status === 'PUBLISHED' || p.status === 'FEATURED').length} ACTIVE</span>
-          <span>{mockProjects.filter((p) => p.status === 'DRAFT').length} DRAFT</span>
+          <span>{activeProjects} ACTIVE</span>
+          <span>{draftProjects} DRAFT</span>
         </div>
       </Card>
 
@@ -24,15 +38,15 @@ export const StatsGrid: React.FC = () => {
       <Card elevation={1} className="p-4 bg-white relative">
         <div className="flex items-center justify-between text-xs font-mono">
           <span className="font-bold text-carbon-muted uppercase">DESIGN VAULT</span>
-          <span className="text-carbon font-bold">87 ITEMS</span>
+          <span className="text-carbon font-bold">{designs.length} ITEMS</span>
         </div>
         <div className="font-display font-black text-3xl text-kalcer-cobalt mt-2">
-          87
+          {designs.length}
         </div>
         <div className="text-xs font-mono text-carbon-muted mt-1 flex justify-between border-t border-carbon/10 pt-2">
-          <span>62 RISO</span>
-          <span>15 JERSEY</span>
-          <span>10 PACKAGING</span>
+          <span>{risoCount} POSTER/RISO</span>
+          <span>{apparelCount} APPAREL</span>
+          <span>{otherDesigns} OTHER</span>
         </div>
       </Card>
 
@@ -40,31 +54,32 @@ export const StatsGrid: React.FC = () => {
       <Card elevation={1} className="p-4 bg-white relative">
         <div className="flex items-center justify-between text-xs font-mono">
           <span className="font-bold text-carbon-muted uppercase">FIELD OPS</span>
-          <span className="text-kalcer-cobalt font-bold">65 LOGS</span>
+          <span className="text-kalcer-cobalt font-bold">{activities.length} LOGS</span>
         </div>
         <div className="font-display font-black text-3xl text-kalcer-orange mt-2">
-          65
+          {activities.length}
         </div>
         <div className="text-xs font-mono text-carbon-muted mt-1 flex justify-between border-t border-carbon/10 pt-2">
-          <span>24 MARATHONS</span>
-          <span>41 SPRINTS</span>
+          <span>{marathonCount} ENDURANCE</span>
+          <span>{otherActivities} TECH/WORKSHOP</span>
         </div>
       </Card>
 
       {/* Card 4: Dispatches */}
       <Card elevation={1} className="p-4 bg-white relative">
         <div className="flex items-center justify-between text-xs font-mono">
-          <span className="font-bold text-carbon-muted uppercase">DISPATCHES</span>
-          <span className="text-kalcer-emerald font-bold">6 CERTS</span>
+          <span className="font-bold text-carbon-muted uppercase">DISPATCHES &amp; CERTS</span>
+          <span className="text-kalcer-emerald font-bold">{certifications.length} CERTS</span>
         </div>
         <div className="font-display font-black text-3xl text-kalcer-emerald mt-2">
-          85+
+          {contentItems.length}
         </div>
         <div className="text-xs font-mono text-carbon-muted mt-1 flex justify-between border-t border-carbon/10 pt-2">
-          <span>YOUTUBE</span>
-          <span>SUBSTACK</span>
+          <span>{contentItems.filter((c) => c.platform === 'YOUTUBE').length} YOUTUBE</span>
+          <span>{contentItems.filter((c) => c.platform === 'SUBSTACK').length} ESSAYS</span>
         </div>
       </Card>
     </div>
   );
 };
+

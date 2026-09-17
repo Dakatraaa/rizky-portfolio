@@ -1,9 +1,17 @@
+'use client';
+
 import React from 'react';
 import { ProjectCard } from '@/components/public/cards/project-card';
-import { mockProjects } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 
 export const CaseStudies: React.FC = () => {
-  const flagship = mockProjects[0];
+  const { projects } = usePortfolioContent();
+  const publishedProjects = projects.filter((p) => p.status !== 'DRAFT' && p.published !== false);
+  const flagship =
+    publishedProjects.find((p) => p.status === 'FEATURED' || p.featured) ||
+    publishedProjects[0];
+
+  if (!flagship) return null;
 
   return (
     <section id="projects" className="py-14 border-b-2.5 border-carbon bg-paper">
@@ -20,7 +28,7 @@ export const CaseStudies: React.FC = () => {
               </span>
             </div>
             <h2 className="font-display font-black text-3xl sm:text-4xl uppercase text-carbon tracking-tight">
-              LAB CASE STUDIES & HARDWARE RIGS
+              LAB CASE STUDIES &amp; HARDWARE RIGS
             </h2>
             <p className="font-body text-sm text-carbon-muted max-w-2xl mt-1">
               Engineered for low-latency throughput, distributed offline data engines, and real-time kinetic telemetry.
@@ -28,7 +36,7 @@ export const CaseStudies: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-carbon">
-              [ {mockProjects.length} RIGS COMPILED ]
+              [ {publishedProjects.length} RIGS COMPILED ]
             </span>
           </div>
         </div>
@@ -39,3 +47,4 @@ export const CaseStudies: React.FC = () => {
     </section>
   );
 };
+

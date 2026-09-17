@@ -1,10 +1,14 @@
+'use client';
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { mockCurrentlyBuilding } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 import { Hammer, Cpu, ArrowUpRight } from 'lucide-react';
 
 export const CurrentlyBuilding: React.FC = () => {
+  const { currentlyBuilding } = usePortfolioContent();
+
   const getStatusBadgeVariant = (status: string): 'yellow' | 'orange' | 'lime' | 'emerald' | 'cobalt' => {
     switch (status) {
       case 'Planning':
@@ -32,7 +36,7 @@ export const CurrentlyBuilding: React.FC = () => {
                 ACTIVE PIPELINE
               </span>
               <span className="font-mono text-xs text-carbon-muted uppercase tracking-wider">
-                R&D LAB // IN THE CRUCIBLE
+                R&amp;D LAB // IN THE CRUCIBLE
               </span>
             </div>
             <h2 className="font-display font-black text-3xl sm:text-4xl uppercase text-carbon tracking-tight flex items-center gap-3">
@@ -45,14 +49,14 @@ export const CurrentlyBuilding: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-carbon flex items-center gap-1.5">
               <Hammer className="w-4 h-4 text-kalcer-orange" />
-              [ 4 ACTIVE PIPELINES ]
+              [ {currentlyBuilding.length} ACTIVE PIPELINES ]
             </span>
           </div>
         </div>
 
         {/* 4-Item Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockCurrentlyBuilding.map((item) => (
+          {currentlyBuilding.map((item) => (
             <Card
               key={item.id}
               elevation={1}
@@ -108,3 +112,4 @@ export const CurrentlyBuilding: React.FC = () => {
     </section>
   );
 };
+

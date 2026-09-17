@@ -1,18 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input, Textarea } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { MascotRenderer, MascotPoseType } from '@/components/mascot/mascot-renderer';
 import { SpeechBubble } from '@/components/mascot/speech-bubble';
-import { mockMascotSettings } from '@/data';
-import { Save, Bot, Sparkles, Volume2 } from 'lucide-react';
+import { usePortfolioContent } from '@/context/content-context';
+import { Save, Bot, Check } from 'lucide-react';
 
 export default function AdminMascotPage() {
-  const [activePose, setActivePose] = useState<MascotPoseType>('master');
-  const [speech, setSpeech] = useState(mockMascotSettings.currentDialogue);
+  const { mascotSettings, updateMascotSettings } = usePortfolioContent();
+
+  const [activePose, setActivePose] = useState<MascotPoseType>(
+    (mascotSettings.activePose as MascotPoseType) || 'master'
+  );
+  const [speech, setSpeech] = useState(mascotSettings.currentDialogue || '');
+  const [telemetryVersion, setTelemetryVersion] = useState(mascotSettings.telemetryVersion || 'v2.4.0');
+  const [statusLabel, setStatusLabel] = useState(mascotSettings.statusLabel || 'SYSTEMS KERNEL: ONLINE');
+  const [savedNotice, setSavedNotice] = useState(false);
+
+  useEffect(() => {
+    if (mascotSettings) {
+      setSpeech(mascotSettings.currentDialogue);
+      setTelemetryVersion(mascotSettings.telemetryVersion);
+      setStatusLabel(mascotSettings.statusLabel);
+    }
+  }, [mascotSettings]);
 
   const poses: { id: MascotPoseType; label: string }[] = [
     { id: 'master', label: 'Master Hero Front' },
@@ -25,20 +39,41 @@ export default function AdminMascotPage() {
     { id: 'daily-coffee', label: 'Daily Coffee' },
   ];
 
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateMascotSettings({
+      activePose: activePose as any,
+      currentDialogue: speech,
+      telemetryVersion,
+      statusLabel,
+    });
+    setSavedNotice(true);
+    setTimeout(() => setSavedNotice(false), 3000);
+  };
+
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between pb-4 border-b-2.5 border-carbon">
+    <form onSubmit={handleSave} className="space-y-6 max-w-5xl mx-auto">
+      <div className="flex flex-wrap items-center justify-between pb-4 border-b-2.5 border-carbon gap-3">
         <div>
-          <h1 className="font-display font-black text-2xl uppercase text-carbon tracking-tight">
-            Mascot Telemetry & Behavioral Engine
+          <h1 className="font-display font-black text-2xl uppercase text-carbon tracking-tight flex items-center gap-2">
+            <Bot className="w-6 h-6 text-kalcer-orange" />
+            Mascot Telemetry &amp; Behavioral Engine
           </h1>
           <p className="font-mono text-xs text-carbon-muted mt-0.5">
             Configure pixel mascot sprite poses, interactive dialogue scripts, and telemetry dock states.
           </p>
         </div>
-        <Button variant="primary" size="sm" className="gap-1.5 font-mono">
-          <Save className="w-3.5 h-3.5" /> Save Configuration
-        </Button>
+
+        <div className="flex items-center gap-2">
+          {savedNotice && (
+            <span className="px-2.5 py-1 bg-kalcer-emerald text-white font-mono text-xs font-bold flex items-center gap-1 animate-in fade-in">
+              <Check className="w-3.5 h-3.5" /> Configuration Saved!
+            </span>
+          )}
+          <Button variant="primary" size="sm" type="submit" className="gap-1.5 font-mono">
+            <Save className="w-3.5 h-3.5" /> Save Configuration
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -51,6 +86,7 @@ export default function AdminMascotPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {poses.map((p) => (
                 <button
+                  type="button"
                   key={p.id}
                   onClick={() => setActivePose(p.id)}
                   className={`p-2.5 border-2 border-carbon text-left font-mono text-xs transition-all brutal-press ${
@@ -75,9 +111,17 @@ export default function AdminMascotPage() {
                 rows={2}
               />
 
-              <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                <Input label="TELEMETRY VERSION" defaultValue={mockMascotSettings.telemetryVersion} />
-                <Input label="STATUS BADGE LABEL" defaultValue={mockMascotSettings.statusLabel} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                <Input
+                  label="TELEMETRY VERSION"
+                  value={telemetryVersion}
+                  onChange={(e) => setTelemetryVersion(e.target.value)}
+                />
+                <Input
+                  label="STATUS BADGE LABEL"
+                  value={statusLabel}
+                  onChange={(e) => setStatusLabel(e.target.value)}
+                />
               </div>
             </div>
           </Card>
@@ -96,12 +140,13 @@ export default function AdminMascotPage() {
             </div>
 
             <div className="pt-2 border-t border-carbon/20 flex items-center justify-between text-xs font-mono">
-              <span className="text-carbon-muted">RENDERING: PIXELATED</span>
+              <span className="text-carbon-muted">POSE: {activePose}</span>
               <span className="text-kalcer-emerald font-bold">● ACTIVE ON DOCK</span>
             </div>
           </Card>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
+

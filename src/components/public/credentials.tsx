@@ -1,11 +1,16 @@
+'use client';
+
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { CertificationCard } from '@/components/public/cards/certification-card';
-import { mockCertifications } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 
 export const Credentials: React.FC = () => {
-  const featured = mockCertifications.filter((c) => c.isFeatured);
-  const secondary = mockCertifications.filter((c) => !c.isFeatured);
+  const { certifications } = usePortfolioContent();
+  const publishedCerts = certifications.filter((c) => c.published !== false);
+
+  const featured = publishedCerts.filter((c) => c.isFeatured || c.featured);
+  const secondary = publishedCerts.filter((c) => !c.isFeatured && !c.featured);
 
   return (
     <section id="certifications" className="py-14 border-b-2.5 border-carbon bg-paper-technical">
@@ -22,31 +27,36 @@ export const Credentials: React.FC = () => {
               </span>
             </div>
             <h2 className="font-display font-black text-3xl sm:text-4xl uppercase text-carbon tracking-tight">
-              CERTIFICATIONS & CREDENTIAL ARCHIVE
+              CERTIFICATIONS &amp; CREDENTIAL ARCHIVE
             </h2>
             <p className="font-body text-sm text-carbon-muted max-w-2xl mt-1">
               Official cloud architecture qualifications, front-end engineering credentials, competitive informatics medals, and graphic arts recognition.
             </p>
           </div>
           <Badge variant="orange" pill>
-            VERIFIED CREDENTIALS
+            {publishedCerts.length} VERIFIED CREDENTIALS
           </Badge>
         </div>
 
         {/* Featured Big Cards (2 Columns) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {featured.map((cert) => (
-            <CertificationCard key={cert.id} certification={cert} featured />
-          ))}
-        </div>
+        {featured.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {featured.map((cert) => (
+              <CertificationCard key={cert.id} certification={cert} featured />
+            ))}
+          </div>
+        )}
 
         {/* Secondary Compact Grid (4 Columns) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {secondary.map((cert) => (
-            <CertificationCard key={cert.id} certification={cert} featured={false} />
-          ))}
-        </div>
+        {secondary.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {secondary.map((cert) => (
+              <CertificationCard key={cert.id} certification={cert} featured={false} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 };
+

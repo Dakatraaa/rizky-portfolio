@@ -3,16 +3,19 @@
 import React, { useState } from 'react';
 import { DesignCard } from '@/components/public/cards/design-card';
 import { DesignLightbox } from '@/components/public/design-lightbox';
-import { mockDesigns } from '@/data';
 import { Badge } from '@/components/ui/badge';
+import { usePortfolioContent } from '@/context/content-context';
 import { Design } from '@/types';
 
 export default function DesignPage() {
+  const { designs } = usePortfolioContent();
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [activeLightboxDesign, setActiveLightboxDesign] = useState<Design | null>(null);
 
+  const publishedDesigns = designs.filter((d) => d.published !== false);
+
   const categories = [
-    { id: 'ALL', label: `ALL CATALOGS [${mockDesigns.length}]` },
+    { id: 'ALL', label: `ALL CATALOGS [${publishedDesigns.length}]` },
     { id: 'POSTER', label: 'POSTER & RISO' },
     { id: 'JERSEY', label: 'TECHNICAL APPAREL' },
     { id: 'T_SHIRT', label: 'STREETWEAR' },
@@ -23,8 +26,8 @@ export default function DesignPage() {
 
   const filteredDesigns =
     selectedCategory === 'ALL'
-      ? mockDesigns
-      : mockDesigns.filter((d) => d.category === selectedCategory);
+      ? publishedDesigns
+      : publishedDesigns.filter((d) => d.category === selectedCategory);
 
   return (
     <div className="py-12 max-w-7xl mx-auto px-4 space-y-8">
@@ -33,7 +36,7 @@ export default function DesignPage() {
         <div className="flex items-center gap-2 mb-2">
           <Badge variant="cobalt">PRINT VAULT</Badge>
           <span className="font-mono text-xs text-carbon-muted uppercase tracking-wider">
-            87 CATALOG ARTIFACTS
+            {publishedDesigns.length} CATALOG ARTIFACTS
           </span>
         </div>
         <h1 className="font-display font-black text-4xl sm:text-5xl uppercase text-carbon tracking-tight">
@@ -84,11 +87,12 @@ export default function DesignPage() {
       {/* Accessible Lightbox Modal */}
       <DesignLightbox
         design={activeLightboxDesign}
-        designs={filteredDesigns.length > 0 ? filteredDesigns : mockDesigns}
+        designs={filteredDesigns.length > 0 ? filteredDesigns : publishedDesigns}
         onClose={() => setActiveLightboxDesign(null)}
         onSelect={(d) => setActiveLightboxDesign(d)}
       />
     </div>
   );
 }
+
 

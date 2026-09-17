@@ -39,6 +39,8 @@ export const metadata: Metadata = {
   authors: [{ name: 'Ariesta Rizky' }],
 };
 
+import { ContentProvider } from '@/context/content-context';
+
 export default function RootLayout({
   children,
 }: {
@@ -50,8 +52,9 @@ export default function RootLayout({
       className={`scroll-smooth ${spaceGrotesk.variable} ${plusJakartaSans.variable} ${spaceMono.variable}`}
     >
       <body className="antialiased min-h-screen selection:bg-kalcer-orange selection:text-white">
-        {children}
+        <ContentProvider>{children}</ContentProvider>
       </body>
     </html>
   );
 }
+

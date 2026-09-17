@@ -7,10 +7,11 @@ import { Input, Textarea } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { MascotRenderer } from '@/components/mascot/mascot-renderer';
 import { SpeechBubble } from '@/components/mascot/speech-bubble';
-import { mockProfile } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 import { Check, Copy, Send, Loader2, AlertCircle, RotateCcw } from 'lucide-react';
 
 export const ContactForm: React.FC = () => {
+  const { profile } = usePortfolioContent();
   const [copied, setCopied] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState('PROJECT INQUIRY');
   const [name, setName] = useState('');
@@ -27,7 +28,7 @@ export const ContactForm: React.FC = () => {
   ];
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(mockProfile.contactEmail);
+    navigator.clipboard.writeText(profile.contactEmail || 'ariesta.rizky@kalcerstudio.com');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -109,7 +110,7 @@ export const ContactForm: React.FC = () => {
                     PRIMARY EMAIL
                   </div>
                   <div className="font-mono text-sm font-bold text-carbon">
-                    {mockProfile.contactEmail}
+                    {profile.contactEmail}
                   </div>
                 </div>
                 <button

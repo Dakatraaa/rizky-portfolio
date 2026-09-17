@@ -1,29 +1,41 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { SkillBadge } from '@/components/public/cards/skill-badge';
-import { mockSkills } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 import { Skill } from '@/types';
 
 export const TechRigs: React.FC = () => {
+  const { skills } = usePortfolioContent();
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
-  const [activeSkill, setActiveSkill] = useState<Skill>(mockSkills[0]);
+  const [activeSkill, setActiveSkill] = useState<Skill | null>(null);
+
+  useEffect(() => {
+    if (skills.length > 0 && !activeSkill) {
+      setActiveSkill(skills[0]);
+    } else if (skills.length > 0 && activeSkill) {
+      const refreshed = skills.find((s) => s.id === activeSkill.id) || skills[0];
+      setActiveSkill(refreshed);
+    }
+  }, [skills, activeSkill]);
 
   const categories = [
-    { id: 'ALL', label: `ALL RIGS [${mockSkills.length}]` },
-    { id: 'PROGRAMMING', label: 'PROGRAMMING [5]' },
-    { id: 'WEB', label: 'WEB ARCHITECTURE [4]' },
-    { id: 'STORAGE_CLOUD', label: 'STORAGE & CLOUD [4]' },
-    { id: 'DESIGN', label: 'DESIGN TOOLS [3]' },
-    { id: 'WORKFLOW', label: 'WORKFLOW [2]' },
+    { id: 'ALL', label: `ALL RIGS [${skills.length}]` },
+    { id: 'PROGRAMMING', label: `PROGRAMMING [${skills.filter((s) => s.category === 'PROGRAMMING').length}]` },
+    { id: 'WEB', label: `WEB ARCHITECTURE [${skills.filter((s) => s.category === 'WEB').length}]` },
+    { id: 'STORAGE_CLOUD', label: `STORAGE & CLOUD [${skills.filter((s) => s.category === 'STORAGE_CLOUD').length}]` },
+    { id: 'DESIGN', label: `DESIGN TOOLS [${skills.filter((s) => s.category === 'DESIGN').length}]` },
+    { id: 'WORKFLOW', label: `WORKFLOW [${skills.filter((s) => s.category === 'WORKFLOW').length}]` },
   ];
 
   const filteredSkills =
     selectedCategory === 'ALL'
-      ? mockSkills
-      : mockSkills.filter((s) => s.category === selectedCategory);
+      ? skills
+      : skills.filter((s) => s.category === selectedCategory);
+
+  const currentActiveSkill = activeSkill || skills[0];
 
   return (
     <section id="skills" className="py-14 border-b-2.5 border-carbon bg-paper">
@@ -40,14 +52,14 @@ export const TechRigs: React.FC = () => {
               </span>
             </div>
             <h2 className="font-display font-black text-3xl sm:text-4xl uppercase text-carbon tracking-tight">
-              HARDWARE RIGS, LANGUAGES & CREATIVE INSTRUMENTS
+              HARDWARE RIGS, LANGUAGES &amp; CREATIVE INSTRUMENTS
             </h2>
             <p className="font-body text-sm text-carbon-muted max-w-2xl mt-1">
               Zero arbitrary percentage bars. Instead, an interactive telemetry matrix of active production stacks, daily drivers, and systems architectures crafted for high-performance.
             </p>
           </div>
           <Badge variant="lime" pill>
-            28 ACTIVE RIGS
+            {skills.length} ACTIVE RIGS
           </Badge>
         </div>
 
@@ -76,79 +88,82 @@ export const TechRigs: React.FC = () => {
               <SkillBadge
                 key={skill.id}
                 skill={skill}
-                isSelected={activeSkill.id === skill.id}
+                isSelected={currentActiveSkill?.id === skill.id}
                 onClick={() => setActiveSkill(skill)}
               />
             ))}
           </div>
 
           {/* Right: Inspector Detail Card */}
-          <div className="lg:col-span-5">
-            <Card elevation={2} className="p-6 bg-white relative">
-              <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-carbon">
-                <span className="font-mono text-xs font-bold uppercase text-carbon-muted">
-                  // TELEMETRY INSPECTOR
-                </span>
-                <Badge variant="orange">{activeSkill.proficiencyLevel}</Badge>
-              </div>
+          {currentActiveSkill && (
+            <div className="lg:col-span-5">
+              <Card elevation={2} className="p-6 bg-white relative">
+                <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-carbon">
+                  <span className="font-mono text-xs font-bold uppercase text-carbon-muted">
+                    // TELEMETRY INSPECTOR
+                  </span>
+                  <Badge variant="orange">{currentActiveSkill.proficiencyLevel}</Badge>
+                </div>
 
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-display font-black text-2xl text-carbon">
-                    {activeSkill.name}
-                  </h3>
-                  <p className="font-mono text-xs text-kalcer-cobalt mt-0.5">
-                    {activeSkill.categoryLabel}
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-display font-black text-2xl text-carbon">
+                      {currentActiveSkill.name}
+                    </h3>
+                    <p className="font-mono text-xs text-kalcer-cobalt mt-0.5">
+                      {currentActiveSkill.categoryLabel}
+                    </p>
+                  </div>
+
+                  <p className="font-body text-sm text-carbon/90 leading-relaxed">
+                    {currentActiveSkill.description}
                   </p>
+
+                  {/* Metrics */}
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="p-2.5 bg-paper-technical border border-carbon">
+                      <div className="font-mono text-[10px] text-carbon-muted font-bold">
+                        BENCHMARK SCORE
+                      </div>
+                      <div className="font-display font-black text-xl text-carbon mt-0.5">
+                        {currentActiveSkill.benchmarkScore} / 100
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-paper-technical border border-carbon">
+                      <div className="font-mono text-[10px] text-carbon-muted font-bold">
+                        ACTIVE REPOSITORIES
+                      </div>
+                      <div className="font-display font-black text-xl text-kalcer-orange mt-0.5">
+                        {currentActiveSkill.activeReposCount}+ REPOS
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Connected Projects */}
+                  {currentActiveSkill.connectedProjects && currentActiveSkill.connectedProjects.length > 0 && (
+                    <div className="pt-2">
+                      <div className="font-mono text-xs font-bold uppercase text-carbon-muted mb-1.5">
+                        CONNECTED LAB RIGS:
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {currentActiveSkill.connectedProjects.map((p, i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-0.5 bg-paper-dark text-white font-mono text-xs rounded-none"
+                          >
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                <p className="font-body text-sm text-carbon/90 leading-relaxed">
-                  {activeSkill.description}
-                </p>
-
-                {/* Metrics */}
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="p-2.5 bg-paper-technical border border-carbon">
-                    <div className="font-mono text-[10px] text-carbon-muted font-bold">
-                      BENCHMARK SCORE
-                    </div>
-                    <div className="font-display font-black text-xl text-carbon mt-0.5">
-                      {activeSkill.benchmarkScore} / 100
-                    </div>
-                  </div>
-                  <div className="p-2.5 bg-paper-technical border border-carbon">
-                    <div className="font-mono text-[10px] text-carbon-muted font-bold">
-                      ACTIVE REPOSITORIES
-                    </div>
-                    <div className="font-display font-black text-xl text-kalcer-orange mt-0.5">
-                      {activeSkill.activeReposCount}+ REPOS
-                    </div>
-                  </div>
-                </div>
-
-                {/* Connected Projects */}
-                {activeSkill.connectedProjects && activeSkill.connectedProjects.length > 0 && (
-                  <div className="pt-2">
-                    <div className="font-mono text-xs font-bold uppercase text-carbon-muted mb-1.5">
-                      CONNECTED LAB RIGS:
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {activeSkill.connectedProjects.map((p, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 bg-paper-dark text-white font-mono text-xs rounded-none"
-                        >
-                          {p}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Card>
-          </div>
+              </Card>
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
 };
+

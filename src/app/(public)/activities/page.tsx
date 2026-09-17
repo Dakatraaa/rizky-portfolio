@@ -2,14 +2,17 @@
 
 import React, { useState } from 'react';
 import { ActivityCard } from '@/components/public/cards/activity-card';
-import { mockActivities } from '@/data';
 import { Badge } from '@/components/ui/badge';
+import { usePortfolioContent } from '@/context/content-context';
 
 export default function ActivitiesPage() {
+  const { activities } = usePortfolioContent();
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
 
+  const publishedActivities = activities.filter((a) => a.published !== false && a.status !== 'DRAFT');
+
   const categories = [
-    { id: 'ALL', label: `ALL FIELD LOGS [${mockActivities.length}]` },
+    { id: 'ALL', label: `ALL FIELD LOGS [${publishedActivities.length}]` },
     { id: 'RUNNING', label: 'MARATHON & TRACK' },
     { id: 'CODING', label: 'SYSTEMS & DEMOS' },
     { id: 'WORKSHOP', label: 'ATELIER WORKSHOPS' },
@@ -19,8 +22,8 @@ export default function ActivitiesPage() {
 
   const filteredActivities =
     selectedCategory === 'ALL'
-      ? mockActivities
-      : mockActivities.filter((a) => a.category === selectedCategory);
+      ? publishedActivities
+      : publishedActivities.filter((a) => a.category === selectedCategory);
 
   return (
     <div className="py-12 max-w-7xl mx-auto px-4 space-y-8">
@@ -28,7 +31,7 @@ export default function ActivitiesPage() {
         <div className="flex items-center gap-2 mb-2">
           <Badge variant="lime">FIELD ARCHIVE</Badge>
           <span className="font-mono text-xs text-carbon-muted uppercase tracking-wider">
-            65 FIELD OPS LOGS
+            {publishedActivities.length} FIELD OPS LOGS
           </span>
         </div>
         <h1 className="font-display font-black text-4xl sm:text-5xl uppercase text-carbon tracking-tight">
@@ -73,4 +76,5 @@ export default function ActivitiesPage() {
     </div>
   );
 }
+
 

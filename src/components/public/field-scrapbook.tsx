@@ -1,9 +1,14 @@
+'use client';
+
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { ActivityCard } from '@/components/public/cards/activity-card';
-import { mockActivities } from '@/data';
+import { usePortfolioContent } from '@/context/content-context';
 
 export const FieldScrapbook: React.FC = () => {
+  const { activities } = usePortfolioContent();
+  const publishedActivities = activities.filter((a) => a.published !== false && a.status !== 'DRAFT');
+
   return (
     <section id="activities" className="py-14 border-b-2.5 border-carbon bg-paper-technical">
       <div className="max-w-7xl mx-auto px-4">
@@ -26,13 +31,13 @@ export const FieldScrapbook: React.FC = () => {
             </p>
           </div>
           <Badge variant="lime" pill>
-            FIELD ARCHIVE
+            {publishedActivities.length} FIELD LOGS
           </Badge>
         </div>
 
-        {/* 3 Scrapbook Polaroid Cards */}
+        {/* Scrapbook Polaroid Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {mockActivities.map((act, idx) => (
+          {publishedActivities.map((act, idx) => (
             <ActivityCard key={act.id} activity={act} index={idx} />
           ))}
         </div>
@@ -40,3 +45,4 @@ export const FieldScrapbook: React.FC = () => {
     </section>
   );
 };
+

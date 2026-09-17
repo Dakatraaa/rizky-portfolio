@@ -2,14 +2,17 @@
 
 import React, { useState } from 'react';
 import { ProjectCard } from '@/components/public/cards/project-card';
-import { mockProjects } from '@/data';
 import { Badge } from '@/components/ui/badge';
+import { usePortfolioContent } from '@/context/content-context';
 
 export default function ProjectsPage() {
+  const { projects } = usePortfolioContent();
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
 
+  const publishedProjects = projects.filter((p) => p.status !== 'DRAFT' && p.published !== false);
+
   const categories = [
-    { id: 'ALL', label: `ALL RIGS [${mockProjects.length}]` },
+    { id: 'ALL', label: `ALL RIGS [${publishedProjects.length}]` },
     { id: 'FLAGSHIP RIG', label: 'FLAGSHIP RIGS' },
     { id: 'SYSTEMS', label: 'SYSTEMS & STORAGE' },
     { id: 'AUDIO DSP', label: 'AUDIO DSP & SYNTH' },
@@ -18,8 +21,8 @@ export default function ProjectsPage() {
 
   const filteredProjects =
     selectedCategory === 'ALL'
-      ? mockProjects
-      : mockProjects.filter((p) => p.categoryTag === selectedCategory || p.category === selectedCategory);
+      ? publishedProjects
+      : publishedProjects.filter((p) => p.categoryTag === selectedCategory || p.category === selectedCategory);
 
   const flagship = filteredProjects.find((p) => p.status === 'FEATURED' || p.featured) || filteredProjects[0];
   const otherProjects = filteredProjects.filter((p) => p.id !== flagship?.id);
@@ -87,4 +90,5 @@ export default function ProjectsPage() {
     </div>
   );
 }
+
 

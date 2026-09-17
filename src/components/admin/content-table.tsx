@@ -6,59 +6,46 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/feedback-state';
-import { Search } from 'lucide-react';
+import { usePortfolioContent } from '@/context/content-context';
+import { Search, ExternalLink, Edit } from 'lucide-react';
 
 export const ContentTable: React.FC = () => {
+  const { projects, designs, activities } = usePortfolioContent();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTaxonomy, setSelectedTaxonomy] = useState('ALL');
 
-  // Unified items
+  // Aggregated live items from content store
   const tableItems = [
-    {
-      id: 'item-1',
-      title: 'RunHub OS — Adaptive Telemetry Engine',
-      slug: 'runhub-os-telemetry',
-      taxonomy: 'PROJECT',
-      status: 'FEATURED',
-      modified: '2h ago',
-      viewUrl: '/projects',
-    },
-    {
-      id: 'item-2',
-      title: 'Sunda Acid Vol. 2 — Folk Electro Poster',
-      slug: 'sunda-acid-poster-02',
-      taxonomy: 'DESIGN',
-      status: 'PUBLISHED',
-      modified: 'Yesterday',
-      viewUrl: '/design',
-    },
-    {
-      id: 'item-3',
-      title: 'Sudirman CFD 21.1K Half-Marathon Simulation',
-      slug: 'dispatches/sudirman-cfd-half',
-      taxonomy: 'ACTIVITY',
-      status: 'PUBLISHED',
-      modified: 'Oct 20, 2024',
-      viewUrl: '/activities',
-    },
-    {
-      id: 'item-4',
-      title: 'WebAssembly Audio Synthesizer Node',
-      slug: 'wasm-audio-dsp',
-      taxonomy: 'PROJECT',
-      status: 'DRAFT',
-      modified: '3 days ago',
-      viewUrl: '/projects',
-    },
-    {
-      id: 'item-5',
-      title: "Velocity R/C: 'Ekiden Kit' Running Apparel",
-      slug: 'velocity-rc-ekiden-kit',
-      taxonomy: 'DESIGN',
-      status: 'PUBLISHED',
-      modified: '4 days ago',
-      viewUrl: '/design',
-    },
+    ...projects.map((p) => ({
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      taxonomy: 'PROJECT' as const,
+      status: p.status,
+      modified: p.updatedAt || 'Recent',
+      viewUrl: `/projects/${p.slug}`,
+      editUrl: `/admin/projects`,
+    })),
+    ...designs.map((d) => ({
+      id: d.id,
+      title: d.title,
+      slug: d.slug,
+      taxonomy: 'DESIGN' as const,
+      status: d.featured ? 'FEATURED' : d.published ? 'PUBLISHED' : 'DRAFT',
+      modified: d.updatedAt || `${d.year}`,
+      viewUrl: `/design/${d.slug}`,
+      editUrl: `/admin/designs`,
+    })),
+    ...activities.map((a) => ({
+      id: a.id,
+      title: a.title,
+      slug: a.slug,
+      taxonomy: 'ACTIVITY' as const,
+      status: a.status,
+      modified: a.date,
+      viewUrl: `/activities/${a.slug}`,
+      editUrl: `/admin/activities`,
+    })),
   ];
 
   const filteredItems = tableItems.filter((item) => {
@@ -157,8 +144,14 @@ export const ContentTable: React.FC = () => {
                   <td className="p-3 text-neutral-500 font-semibold">{row.modified}</td>
 
                   <td className="p-3 text-right space-x-2">
-                    <Button variant="secondary" size="sm" className="font-mono text-xs px-2.5 py-1">
-                      Edit
+                    <Button
+                      href={row.editUrl}
+                      variant="secondary"
+                      size="sm"
+                      className="font-mono text-xs px-2.5 py-1"
+                    >
+                      <Edit className="w-3 h-3 mr-1" />
+                      Manage
                     </Button>
                     <Button
                       href={row.viewUrl}
@@ -167,6 +160,7 @@ export const ContentTable: React.FC = () => {
                       size="sm"
                       className="font-mono text-xs px-2.5 py-1 border border-carbon"
                     >
+                      <ExternalLink className="w-3 h-3 mr-1" />
                       View
                     </Button>
                   </td>
@@ -178,12 +172,13 @@ export const ContentTable: React.FC = () => {
       )}
 
       <div className="p-3 border-t-2 border-carbon bg-paper flex items-center justify-between text-xs font-mono text-carbon-muted">
-        <span>Showing {filteredItems.length} items</span>
-        <Button variant="secondary" size="sm" className="font-mono text-xs">
+        <span>Showing {filteredItems.length} items from live reactive store</span>
+        <Button href="/admin/projects" variant="secondary" size="sm" className="font-mono text-xs">
           View All Content Archive
         </Button>
       </div>
     </Card>
   );
 };
+
 
