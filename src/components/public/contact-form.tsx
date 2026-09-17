@@ -8,12 +8,16 @@ import { Badge } from '@/components/ui/badge';
 import { MascotRenderer } from '@/components/mascot/mascot-renderer';
 import { SpeechBubble } from '@/components/mascot/speech-bubble';
 import { mockProfile } from '@/data';
-import { Check, Copy, Send } from 'lucide-react';
+import { Check, Copy, Send, Loader2, AlertCircle, RotateCcw } from 'lucide-react';
 
 export const ContactForm: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState('PROJECT INQUIRY');
-  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const subjects = [
     'PROJECT INQUIRY',
@@ -28,10 +32,41 @@ export const ContactForm: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const validateForm = () => {
+    const errs: { name?: string; email?: string; message?: string } = {};
+    if (!name.trim()) errs.name = 'Please enter your name or codename.';
+    if (!email.trim()) {
+      errs.email = 'Please provide an email address.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errs.email = 'Please provide a valid email format (e.g. name@domain.com).';
+    }
+    if (!message.trim()) {
+      errs.message = 'Please provide a transmission message or project brief.';
+    } else if (message.trim().length < 10) {
+      errs.message = 'Message must contain at least 10 characters.';
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    if (!validateForm()) return;
+
+    setStatus('loading');
+
+    // Simulate reliable mock signal transmission
+    setTimeout(() => {
+      setStatus('success');
+    }, 1200);
+  };
+
+  const handleReset = () => {
+    setName('');
+    setEmail('');
+    setMessage('');
+    setErrors({});
+    setStatus('idle');
   };
 
   return (
@@ -79,8 +114,9 @@ export const ContactForm: React.FC = () => {
                 </div>
                 <button
                   onClick={handleCopyEmail}
-                  className="p-2 bg-white border border-carbon brutal-press hover:bg-kalcer-yellow"
+                  className="p-2 bg-white border border-carbon brutal-press hover:bg-kalcer-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carbon"
                   title="Copy email"
+                  aria-label="Copy primary email address"
                 >
                   {copied ? <Check className="w-4 h-4 text-kalcer-emerald" /> : <Copy className="w-4 h-4" />}
                 </button>
@@ -111,32 +147,60 @@ export const ContactForm: React.FC = () => {
           {/* Right Column: Interactive Brutalist Contact Form */}
           <div className="lg:col-span-7">
             <Card elevation={2} className="p-6 bg-white">
-              {submitted ? (
-                <div className="p-8 text-center space-y-3">
-                  <div className="w-12 h-12 mx-auto bg-kalcer-emerald text-white flex items-center justify-center font-display font-bold text-xl border-2 border-carbon brutal-shadow">
+              {status === 'success' ? (
+                <div className="p-8 text-center space-y-4">
+                  <div className="w-14 h-14 mx-auto bg-kalcer-emerald text-white flex items-center justify-center font-display font-black text-2xl border-3 border-carbon brutal-shadow">
                     ✓
                   </div>
-                  <h3 className="font-display font-black text-2xl text-carbon">
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-carbon uppercase">
                     SIGNAL TRANSMITTED!
                   </h3>
-                  <p className="font-mono text-xs text-carbon-muted">
-                    Your transmission payload has been logged. Ariesta will establish contact shortly.
+                  <p className="font-body text-sm text-carbon/90 max-w-md mx-auto">
+                    Your transmission payload for <strong className="text-kalcer-orange">[{selectedSubject}]</strong> has been logged into the lab dispatch queue. Ariesta will review and reply to <strong>{email}</strong> shortly.
                   </p>
+                  <div className="pt-3">
+                    <Button
+                      onClick={handleReset}
+                      variant="secondary"
+                      size="md"
+                      className="gap-2 font-mono"
+                    >
+                      <RotateCcw className="w-4 h-4" /> TRANSMIT ANOTHER SIGNAL
+                    </Button>
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} noValidate className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input
-                      label="FULL NAME / CODENAME"
-                      placeholder="e.g. Alex Henderson"
-                      required
-                    />
-                    <Input
-                      label="RETURN PROJECT // EMAIL"
-                      type="email"
-                      placeholder="alex@studio.co"
-                      required
-                    />
+                    <div>
+                      <Input
+                        label="FULL NAME / CODENAME"
+                        placeholder="e.g. Alex Henderson"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                      />
+                      {errors.name && (
+                        <p className="font-mono text-xs text-kalcer-orange mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5" /> {errors.name}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <Input
+                        label="RETURN PROJECT // EMAIL"
+                        type="email"
+                        placeholder="alex@studio.co"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                      {errors.email && (
+                        <p className="font-mono text-xs text-kalcer-orange mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5" /> {errors.email}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   {/* Subject Radio Pills */}
@@ -150,7 +214,7 @@ export const ContactForm: React.FC = () => {
                           type="button"
                           key={subj}
                           onClick={() => setSelectedSubject(subj)}
-                          className={`px-3 py-1 font-mono text-xs font-bold border-2 border-carbon transition-all select-none brutal-press ${
+                          className={`px-3 py-1 font-mono text-xs font-bold border-2 border-carbon transition-all select-none brutal-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carbon ${
                             selectedSubject === subj
                               ? 'bg-carbon text-white shadow-brutal-sm'
                               : 'bg-paper-technical text-carbon hover:bg-white'
@@ -162,15 +226,38 @@ export const ContactForm: React.FC = () => {
                     </div>
                   </div>
 
-                  <Textarea
-                    label="TRANSMISSION BRIEF // PROJECT SPECS"
-                    placeholder="Describe your technical requirements, design objectives, or endurance pacing advisory..."
-                    rows={4}
-                    required
-                  />
+                  <div>
+                    <Textarea
+                      label="TRANSMISSION BRIEF // PROJECT SPECS"
+                      placeholder="Describe your technical requirements, design objectives, or endurance pacing advisory..."
+                      rows={4}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      required
+                    />
+                    {errors.message && (
+                      <p className="font-mono text-xs text-kalcer-orange mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" /> {errors.message}
+                      </p>
+                    )}
+                  </div>
 
-                  <Button type="submit" variant="primary" size="lg" className="w-full gap-2">
-                    <Send className="w-4 h-4" /> TRANSMIT SIGNAL -&gt;
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    disabled={status === 'loading'}
+                    className="w-full gap-2"
+                  >
+                    {status === 'loading' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" /> ENCODING &amp; TRANSMITTING SIGNAL...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" /> TRANSMIT SIGNAL -&gt;
+                      </>
+                    )}
                   </Button>
                 </form>
               )}
@@ -181,3 +268,4 @@ export const ContactForm: React.FC = () => {
     </section>
   );
 };
+

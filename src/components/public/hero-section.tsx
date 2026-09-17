@@ -38,7 +38,17 @@ export const HeroSection: React.FC = () => {
               EXPLORE PROJECTS <ArrowRight className="w-4 h-4" />
             </Button>
             <Button href="#skills" variant="secondary" size="lg">
-              SKILLS & RIGS [28]
+              SKILLS &amp; RIGS [28]
+            </Button>
+            <Button
+              href={mockProfile.cvUrl || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outline"
+              size="md"
+              className="gap-1.5 border-2 border-carbon font-mono text-xs font-bold"
+            >
+              DOWNLOAD CV / RESUME
             </Button>
             <Button href="#contact" variant="terminal" size="md" className="gap-2">
               <Coffee className="w-4 h-4 text-kalcer-yellow" /> SPONSOR RUN/COFFEE
@@ -47,6 +57,7 @@ export const HeroSection: React.FC = () => {
               <ShieldCheck className="w-3.5 h-3.5 text-kalcer-cobalt" /> CERTIFICATIONS [6]
             </Button>
           </div>
+
 
           {/* Telemetry Metric Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">

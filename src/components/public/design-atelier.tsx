@@ -1,9 +1,15 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DesignCard } from '@/components/public/cards/design-card';
+import { DesignLightbox } from '@/components/public/design-lightbox';
 import { mockDesigns } from '@/data';
+import { Design } from '@/types';
 
 export const DesignAtelier: React.FC = () => {
+  const [selectedDesign, setSelectedDesign] = useState<Design | null>(null);
+
   return (
     <section id="designs" className="py-14 border-b-2.5 border-carbon bg-paper-technical">
       <div className="max-w-7xl mx-auto px-4">
@@ -35,10 +41,24 @@ export const DesignAtelier: React.FC = () => {
         {/* 3-Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {mockDesigns.map((design, idx) => (
-            <DesignCard key={design.id} design={design} index={idx} />
+            <DesignCard
+              key={design.id}
+              design={design}
+              index={idx}
+              onClick={() => setSelectedDesign(design)}
+            />
           ))}
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      <DesignLightbox
+        design={selectedDesign}
+        designs={mockDesigns}
+        onClose={() => setSelectedDesign(null)}
+        onSelect={(d) => setSelectedDesign(d)}
+      />
     </section>
   );
 };
+

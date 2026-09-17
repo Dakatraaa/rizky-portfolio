@@ -9,3 +9,4 @@ export * from './experiences';
 export * from './socials';
 export * from './media';
 export * from './mascot';
+export * from './currently-building';

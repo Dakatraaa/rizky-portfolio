@@ -3,16 +3,29 @@ import { Profile } from '@/types';
 export const mockProfile: Profile = {
   id: 'prof-01',
   name: 'Ariesta Rizky',
+  displayName: 'Ariesta Rizky',
   nickname: "Ariesta 'Kalcer' R.",
   headline: 'ENGINEERING SPEED. PRINTING CHAOS.',
   subheadline: 'INFORMATICS CANDIDATE // GRAPHIC CRAFTSMAN // ENDURANCE RUNNER',
   bio: 'Informatics engineer by technical discipline; graphic craftsman by cultural obsession; and endurance runner by pace. Crafting high-compute systems, tactile editorial graphic systems, and WebGL instruments from Jakarta, the cloud.',
+  shortBio: '7th-semester Informatics Engineering student crafting high-throughput systems, spot Risograph print identities, and endurance telemetry.',
+  longBio: 'Ariesta Rizky is an Indonesian technologist, multidisciplinary graphic designer, and endurance athlete based between Jakarta and Bandung. Combining academic rigor in distributed systems and systems programming (Go/Rust/Wasm) with active subcultural involvement in independent printmaking and marathon pacing, he develops tools that live at the intersection of extreme computational speed and tactile human expression.',
   degreeStatus: '7th-semester Electrical/Informatics Engineering candidate. Specializing in high-concurrency backend programs, distributed edge computing, and brutalist typographic art.',
   location: 'Jakarta // Bandung, Indonesia',
   availability: 'AVAILABLE FOR HIRE',
   statusBadge: 'INFORMATICS + DESIGN',
   avatarUrl: '/mascot/mascot-master.png',
   contactEmail: 'ariesta@kalcer.studio',
+  cvUrl: '/cv/Ariesta_Rizky_CV_Kalcer.pdf',
+  resumeUrl: '/cv/Ariesta_Rizky_Resume.pdf',
+  currentFocus: 'Offline-First Telemetry Kernels & Risograph Halftone Separation',
+  interests: ['High-Performance Systems', 'WebAssembly DSP', 'Risograph Printing', 'Marathon Telemetry', 'Neo-Brutalist Web'],
+  identities: {
+    developer: 'High-concurrency Go & WebAssembly engineer building zero-latency local-first computation engines and time-series KV storage.',
+    designer: 'Tactile printmaker, Risograph artisan, and typographic designer drawing inspiration from Indonesian street culture and 8-bit computing.',
+    runner: 'Competitive marathon pacing enthusiast and track runner logging sub-1:31 half marathon splits and cadence metrics.',
+    creator: 'Technical writer and devlogger documenting systems architectures, printmaking experiments, and campus life dispatches.',
+  },
   telemetry: {
     halfRunPace: '54:12',
     halfRunDistance: 'PB - 10KM / 4\'20"',
@@ -24,3 +37,4 @@ export const mockProfile: Profile = {
     stravaPace: "4'30\"/KM",
   },
 };
+

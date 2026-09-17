@@ -6,6 +6,7 @@ import { TechRigs } from '@/components/public/tech-rigs';
 import { Credentials } from '@/components/public/credentials';
 import { CreatorHub } from '@/components/public/creator-hub';
 import { FieldScrapbook } from '@/components/public/field-scrapbook';
+import { CurrentlyBuilding } from '@/components/public/currently-building';
 import { ContactForm } from '@/components/public/contact-form';
 
 export default function HomePage() {
@@ -18,7 +19,9 @@ export default function HomePage() {
       <Credentials />
       <CreatorHub />
       <FieldScrapbook />
+      <CurrentlyBuilding />
       <ContactForm />
     </>
   );
 }
+

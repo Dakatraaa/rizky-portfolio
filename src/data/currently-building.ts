@@ -1,0 +1,48 @@
+import { CurrentlyBuildingItem } from '@/types';
+
+export const mockCurrentlyBuilding: CurrentlyBuildingItem[] = [
+  {
+    id: 'build-01',
+    title: 'RunHub Web BLE 5.0 Direct Sensor Kernel',
+    codename: 'RIG-BLE-STREAM',
+    description: 'Direct browser Bluetooth Low Energy bridge parsing binary ANT+ and FIT data streams from optical HR bands in real time without companion smartphone apps.',
+    status: 'In Development',
+    statusColor: 'orange',
+    techStack: ['Web Bluetooth API', 'Web Workers', 'Binary Structs', 'Go Wasm'],
+    targetDate: 'Q4 2024',
+    progressHighlight: '20Hz stream parser stabilized on Chromium engine',
+  },
+  {
+    id: 'build-02',
+    title: 'Kalcer Studio Risograph Separation Web Node',
+    codename: 'ATELIER-RISO-UI',
+    description: 'Browser-based halftone screen angle generator with instant spot ink layering preview (Fluorescent Orange, Cornflower, Federal Blue, Risofederal Pink).',
+    status: 'Beta',
+    statusColor: 'lime',
+    techStack: ['Next.js 14', 'WebGL Shaders', 'Tailwind CSS', 'Sharp'],
+    targetDate: 'Active Testing',
+    progressHighlight: 'Internal beta tested across 4 design studio partners',
+  },
+  {
+    id: 'build-03',
+    title: 'Distributed Telemetry Time-Series Mesh',
+    codename: 'MESH-TELEMETRY-V1',
+    description: 'Peer-to-peer event coordination protocol using WebRTC data channels for offline athletic event timing in cellular dead zones.',
+    status: 'Planning',
+    statusColor: 'yellow',
+    techStack: ['WebRTC', 'CRDTs', 'Go', 'IndexedDB'],
+    targetDate: 'Q1 2025',
+    progressHighlight: 'Formal packet specification and handshake RFC drafted',
+  },
+  {
+    id: 'build-04',
+    title: 'Ekiden Race Pace Calculator & Lactate Threshold Profiler',
+    codename: 'EKIDEN-PACE-DSP',
+    description: 'Algorithmic split pacing table taking elevation, humidity index, and heart rate recovery curves into consideration for team relay races.',
+    status: 'Experiment',
+    statusColor: 'cobalt',
+    techStack: ['TypeScript', 'Math Kernels', 'Canvas 2D'],
+    targetDate: 'Continuous R&D',
+    progressHighlight: 'Algorithm calibrated against 500KM training logs',
+  },
+];

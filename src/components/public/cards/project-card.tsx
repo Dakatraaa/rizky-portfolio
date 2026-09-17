@@ -1,10 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { TapeStrip } from '@/components/ui/tape-strip';
 import { Project } from '@/types';
-import { Activity, ExternalLink, Github } from 'lucide-react';
+import { Activity, ArrowRight, ExternalLink, Github } from 'lucide-react';
 
 export interface ProjectCardProps {
   project: Project;
@@ -25,16 +26,21 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
           {/* Left: Project Details */}
           <div className="lg:col-span-6 space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="orange">{project.categoryTag}</Badge>
+              <Badge variant="orange">{project.categoryTag || project.category || 'FLAGSHIP RIG'}</Badge>
               <Badge variant="cobalt">GO/FIBER ENGINE</Badge>
               <span className="font-mono text-xs font-bold text-carbon-muted">
                 DEPLOYED // {project.latencyMs} MS LATENCY // {project.clusterCount}
               </span>
             </div>
 
-            <h3 className="font-display font-black text-2xl sm:text-3xl text-carbon leading-tight">
-              {project.title}
-            </h3>
+            <Link
+              href={`/projects/${project.slug}`}
+              className="block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carbon"
+            >
+              <h3 className="font-display font-black text-2xl sm:text-3xl text-carbon leading-tight group-hover:text-kalcer-orange transition-colors">
+                {project.title}
+              </h3>
+            </Link>
 
             <p className="font-body text-sm text-carbon/80 leading-relaxed">
               {project.description}
@@ -47,7 +53,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
                   RUN ENGINE
                 </div>
                 <div className="font-mono text-xs font-bold text-carbon mt-0.5">
-                  {project.telemetryData?.runEngineVersion}
+                  {project.telemetryData?.runEngineVersion || 'v2.4'}
                 </div>
               </div>
               <div className="p-2.5 bg-paper-technical border border-carbon">
@@ -55,7 +61,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
                   SENSOR PROTO
                 </div>
                 <div className="font-mono text-xs font-bold text-carbon mt-0.5">
-                  {project.telemetryData?.sensorProtocol}
+                  {project.telemetryData?.sensorProtocol || 'BLE 5.0'}
                 </div>
               </div>
               <div className="p-2.5 bg-paper-technical border border-carbon">
@@ -64,31 +70,39 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
                 </div>
                 <div className="font-mono text-xs font-bold text-kalcer-emerald mt-0.5 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-kalcer-emerald animate-pulse" />
-                  {project.telemetryData?.uptimePercent}% on Edge
+                  {project.telemetryData?.uptimePercent || 99.9}% on Edge
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-3">
+              <Button
+                href={`/projects/${project.slug}`}
+                variant="primary"
+                size="md"
+                className="gap-2"
+              >
+                REVIEW TECH MATRIX [01] <ArrowRight className="w-4 h-4" />
+              </Button>
               {project.liveUrl && (
                 <Button
                   href={project.liveUrl}
-                  variant="primary"
+                  variant="secondary"
                   size="md"
-                  className="gap-2"
+                  className="gap-2 font-mono"
                 >
-                  REVIEW TECH MATRIX [01] <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-4 h-4" /> Live Demo
                 </Button>
               )}
               {project.githubUrl && (
                 <Button
                   href={project.githubUrl}
-                  variant="secondary"
+                  variant="outline"
                   size="md"
-                  className="gap-2 font-mono"
+                  className="gap-2 font-mono border border-carbon"
                 >
-                  <Github className="w-4 h-4" /> View Source
+                  <Github className="w-4 h-4" /> Source
                 </Button>
               )}
             </div>
@@ -157,15 +171,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
   }
 
   return (
-    <Card elevation={1} interactive className="p-4 bg-white flex flex-col justify-between">
+    <Card elevation={1} interactive className="p-4 bg-white flex flex-col justify-between group">
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Badge variant={project.status === 'FEATURED' ? 'yellow' : 'default'}>
-            {project.categoryTag}
+            {project.categoryTag || project.category || 'SYSTEMS'}
           </Badge>
           <span className="font-mono text-xs text-carbon-muted">{project.updatedAt}</span>
         </div>
-        <h3 className="font-display font-bold text-lg text-carbon">{project.title}</h3>
+        <Link
+          href={`/projects/${project.slug}`}
+          className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carbon"
+        >
+          <h3 className="font-display font-bold text-lg text-carbon group-hover:text-kalcer-orange transition-colors">
+            {project.title}
+          </h3>
+        </Link>
         <p className="font-body text-xs text-carbon-muted line-clamp-2">{project.description}</p>
         <div className="flex flex-wrap gap-1 pt-1">
           {project.techStack.map((tech, i) => (
@@ -177,7 +198,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
       </div>
 
       <div className="pt-4 mt-4 border-t border-carbon/10 flex items-center justify-between font-mono text-xs">
-        <span className="text-carbon-muted">LATENCY: {project.latencyMs || 20}ms</span>
+        <Link
+          href={`/projects/${project.slug}`}
+          className="text-kalcer-cobalt font-bold hover:underline flex items-center gap-1"
+        >
+          CASE STUDY <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
         {project.githubUrl && (
           <Button href={project.githubUrl} variant="outline" size="sm" className="font-mono text-xs gap-1 border border-carbon">
             <Github className="w-3.5 h-3.5" /> Source
@@ -187,3 +213,4 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = fa
     </Card>
   );
 };
+
